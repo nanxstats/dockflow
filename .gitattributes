@@ -1,0 +1,3 @@
+workflow/* linguist-vendored
+_liftr.yml linguist-vendored=false
+Dockerfile linguist-vendored=false
