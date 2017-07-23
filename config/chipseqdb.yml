@@ -1,0 +1,26 @@
+maintainer: "Nan Xiao"
+email: "me@nanx.me"
+from: "rocker/tidyverse:latest"
+pandoc: false
+
+sysdeps:
+  - samtools
+  - autoconf
+
+cran:
+  - rmdformats
+  - statmod
+  - locfit
+  - KernSmooth
+
+bioc:
+  - Rsubread
+  - Rsamtools
+  - rtracklayer
+  - csaw
+  - edgeR
+  - org.Mm.eg.db
+  - TxDb.Mmusculus.UCSC.mm10.knownGene
+  - ChIPpeakAnno
+  - Gviz
+  - BiocStyle

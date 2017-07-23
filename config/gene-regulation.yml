@@ -1,0 +1,23 @@
+maintainer: "Nan Xiao"
+email: "me@nanx.me"
+from: "rocker/tidyverse:latest"
+pandoc: false
+
+sysdeps:
+  - libgsl-dev
+  - ghostscript
+
+cran:
+  - rmdformats
+  - grImport
+
+bioc:
+  - MotifDb
+  - S4Vectors
+  - seqLogo
+  - motifStack
+  - Biostrings
+  - GenomicFeatures
+  - org.Sc.sgd.db
+  - BSgenome.Scerevisiae.UCSC.sacCer3
+  - TxDb.Scerevisiae.UCSC.sacCer3.sgdGene

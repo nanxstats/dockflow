@@ -1,0 +1,20 @@
+maintainer: "Nan Xiao"
+email: "me@nanx.me"
+from: "rocker/tidyverse:latest"
+pandoc: false
+
+sysdeps:
+  - libhdf5-dev
+  - libglu1-mesa-dev
+  - freeglut3-dev
+  - mesa-common-dev
+
+cran:
+  - rmdformats
+  - rgl
+  - ks
+
+bioc:
+  - flowCore
+  - flowStats
+  - flowViz

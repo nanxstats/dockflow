@@ -1,0 +1,25 @@
+maintainer: "Nan Xiao"
+email: "me@nanx.me"
+from: "rocker/tidyverse:latest"
+pandoc: false
+
+cran:
+  - rmdformats
+  - RColorBrewer
+  - matrixStats
+  - stringr
+
+bioc:
+  - limma
+  - minfi
+  - IlluminaHumanMethylation450kanno.ilmn12.hg19
+  - IlluminaHumanMethylation450kmanifest
+  - missMethyl
+  - minfiData
+  - Gviz
+  - DMRcate
+  - FlowSorted.Blood.450k
+  - BiocStyle
+
+remotes:
+  - url::https://www.bioconductor.org/help/workflows/methylationArrayAnalysis/methylationArrayAnalysis_0.99.7.tar.gz

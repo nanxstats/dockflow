@@ -1,0 +1,31 @@
+maintainer: "Nan Xiao"
+email: "me@nanx.me"
+from: "rocker/tidyverse:latest"
+pandoc: false
+
+sysdeps:
+  - samtools
+
+cran:
+  - rmdformats
+  - pheatmap
+  - RColorBrewer
+  - PoiClaClu
+  - ggbeeswarm
+
+bioc:
+  - BiocStyle
+  - airway
+  - Rsamtools
+  - GenomicFeatures
+  - GenomicAlignments
+  - BiocParallel
+  - DESeq2
+  - vsn
+  - genefilter
+  - AnnotationDbi
+  - org.Hs.eg.db
+  - ReportingTools
+  - Gviz
+  - sva
+  - fission

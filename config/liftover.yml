@@ -1,0 +1,14 @@
+maintainer: "Nan Xiao"
+email: "me@nanx.me"
+from: "rocker/tidyverse:latest"
+pandoc: false
+
+cran:
+  - rmdformats
+
+bioc:
+  - BiocGenerics
+  - gwascat
+  - GenomicRanges
+  - rtracklayer
+  - Homo.sapiens
