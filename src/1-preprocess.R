@@ -1,5 +1,9 @@
 # extract tarballs
 for (i in workflow_name)
+  unlink(paste0('workflow/', i, '/src.tar.gz'))
+
+# delete tarballs
+for (i in workflow_name)
   untar(tarfile = paste0('workflow/', i, '/src.tar.gz'),
         exdir = paste0('workflow/', i, '/src'),
         extras = '--strip 1')  # without top directory
