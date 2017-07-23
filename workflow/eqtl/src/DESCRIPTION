@@ -1,0 +1,21 @@
+Package: eQTL
+Title: Dummy Package
+Version: 0.99.128835
+Authors@R: person(role=c("aut", "cre"), "Bioconductor Package",
+        "Maintainer", email = "maintainer@bioconductor.org")
+Description: dummy package
+Depends: R (>= 3.4.0)
+License: Artistic-2.0
+Encoding: UTF-8
+LazyData: true
+VignetteBuilder: knitr
+biocViews: Workflows
+Imports: knitcitations, bibtex, GenomeInfoDb, S4Vectors, GGtools,
+        GGdata, yri1kgv, snpStats, scatterplot3d, lumi, parallel,
+        foreach, doParallel, biglm, lumiHumanAll.db, rmeta,
+        SNPlocs.Hsapiens.dbSNP144.GRCh37, reshape2, ggplot2
+Suggests: knitr, knitcitations
+NeedsCompilation: no
+Packaged: 2017-04-26 13:39:00 UTC; jenkins
+Author: Bioconductor Package Maintainer [aut, cre]
+Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>

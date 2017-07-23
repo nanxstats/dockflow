@@ -1,0 +1,348 @@
+---
+author: "Sonali Arora, Martin Morgan"
+title: "Introduction to Bioconductor for Sequence Data"
+date: "June 3, 2015"
+output:
+  rmdformats::readthedown:
+    toc_depth: 3
+    number_sections: true
+---
+
+```{r style, echo=FALSE, message=FALSE, warning=FALSE, results="asis"}
+options(width=100)
+knitr::opts_chunk$set(message = FALSE, error = FALSE, warning = FALSE, fig.width=6, fig.height=4)
+BiocStyle::markdown()
+```
+
+```{r, echo=FALSE, results="hide", warning=FALSE}
+suppressPackageStartupMessages({
+   library(GenomicRanges)
+   library(GenomicAlignments) 
+   library(Biostrings)
+   library(Rsamtools)
+   library(ShortRead)
+   library(BiocParallel)
+   library(rtracklayer)
+   library(VariantAnnotation)
+   library(AnnotationHub)
+   library(BSgenome.Hsapiens.UCSC.hg19)
+   library(RNAseqData.HNRNPC.bam.chr14)
+})
+
+setAnnotationHubOption("CACHE", "/liftrroot/")
+ah = AnnotationHub()
+```
+
+_Bioconductor_ enables the analysis and comprehension of high-
+throughput genomic data. We have a vast number of packages that allow
+rigorous statistical analysis of large data while keeping
+technological artifacts in mind. Bioconductor helps users place their
+analytic results into biological context, with rich opportunities for
+visualization. Reproducibility is an important goal in _Bioconductor_
+analyses. Different types of analysis can be carried out using
+_Bioconductor_, for example
+
+- Sequencing : RNASeq, ChIPSeq, variants, copy number.. 
+- Microarrays: expression, SNP, ...
+- Domain specific analysis : Flow cytometry, Proteomics ..
+ 
+For these analyses, one typically imports and works with diverse
+sequence-related file types, including fasta, fastq, BAM, gtf, bed,
+and wig files, among others. _Bioconductor_ packages support import,
+common and advanced sequence manipulation operations such as trimming,
+transformation, and alignment including quality assessment.
+
+# Sequencing Resources
+
+Here is a illustrative description elaborating the different
+file types at various stages in a typical analysis, with the 
+package names (in pink boxes) that one will use for each stage. 
+
+<p><img src="sequencepkg.png" width="500" height="400"/></p>
+
+
+The following packages illustrate the diversity of functionality
+available; all are in the release version of _Bioconductor_.
+
+* `r Biocpkg("IRanges")` and `r Biocpkg("GenomicRanges")` for
+  range-based (e.g., chromosomal regions) calculation, data
+  manipulation, and general-purpose data representation.
+  `r Biocpkg("Biostrings")` for DNA and amino acid sequence
+  representation, alignment, pattern matching (e.g., primer removal),
+  and data manipulation of large biological sequences or sets of
+  sequences. `r Biocpkg("ShortRead")` for working with FASTQ files of
+  short reads and their quality scores.
+
+* `r Biocpkg("Rsamtools")` and `r Biocpkg("GenomicAlignments")` for
+  aligned read (BAM file) I/O and data manipulation.
+  `r Biocpkg("rtracklayer")` for import and export of diverse data
+  formats (e.g., BED, WIG, bigWig, GTF, GFF) and manipualtion of
+  tracks on the UCSC genome browser.
+
+* `r Biocpkg("BSgenome")` for accessing and manipulating curated whole-genome
+  representations.  `r Biocpkg("GenomicFeatures")` for annotation of sequence
+  features across common genomes, `r Biocpkg("biomaRt")` for access to Biomart
+  databases.
+
+* `r Biocpkg("SRAdb")`  for querying and retrieving data from the 
+  Sequence Read Archive.
+
+_Bioconductor_ packages are organized by
+[biocViews](http://bioconductor.org/packages/biocViews). Some of the
+entries under
+[Sequencing](http://bioconductor.org/packages/biocViews.html#__Sequencing)
+and other terms, and representative packages, include:
+
+* [RNASeq](http://bioconductor.org/packages/biocViews.html#__RNASeq),
+   e.g., `r Biocpkg("edgeR")`, `r Biocpkg("DESeq2")`,
+   `r Biocpkg("edgeR")`, `r Biocpkg("derfinder")`, and
+   `r Biocpkg("QuasR")`.
+
+* [ChIPSeq](http://bioconductor.org/packages/biocViews.html#__ChIPSeq),
+  e.g.,`r Biocpkg("DiffBind")`, `r Biocpkg("csaw")`, `r Biocpkg("ChIPseeker")`,
+  `r Biocpkg("ChIPQC")`.
+
+* [SNPs](http://bioconductor.org/packages/biocViews.html#__SNP) and
+  other variants, e.g., `r Biocpkg("VariantAnnotation")`,
+  `r Biocpkg("VariantFiltering")`, `r Biocpkg("h5vc")`.
+
+* [CopyNumberVariation](http://bioconductor.org/packages/biocViews.html#__CopyNumberVariation)
+  e.g., `r Biocpkg("DNAcopy")`, `r Biocpkg("crlmm")`, `r Biocpkg("fastseg")`.
+
+* [Microbiome](http://bioconductor.org/packages/biocViews.html#__Microbiome)
+  and metagenome sequencing, e.g., `r Biocpkg("metagenomeSeq")`,
+  `r Biocpkg("phyloseq")`, `r Biocpkg("DirichletMultinomial")`.
+
+# Ranges Infrastructure
+
+Many _Bioconductor_ packages rely heavily on the *IRanges* /
+*GenomicRanges* infrastructure. Thus we will begin with a quick
+introduction to these and then cover different file types.
+
+The `r Biocpkg("GenomicRanges")` package allows us to associate a
+range of chromosome coordinates with a sequence name (e.g.,
+chromosome) and a strand. Such genomic ranges are very useful for
+describing both data (e.g., the coordinates of aligned reads, called
+ChIP peaks, SNPs, or copy number variants) and annotations (e.g., gene
+models, Roadmap Epigenomics regulatory elements, known clinically
+relevant variants from dbSNP).  `GRanges` is an object representing a
+vector of genomic locations and associated annotations.  Each element
+in the vector is comprised of a sequence name, a range, a strand,
+and optional metadata (e.g. score, GC content, etc.).
+
+```[r}
+library(GenomicRanges)
+GRanges(seqnames=Rle(c('chr1', 'chr2', 'chr3'), c(3, 3, 4)),
+      IRanges(1:10, width=5), strand='-',
+      score=101:110, GC = runif(10))
+```
+
+Genomic ranges can be created 'by hand', as above, but are often the
+result of importing data (e.g., via
+`GenomicAlignments::readGAlignments()`) or annotation (e.g., via
+`GenomicFeatures::select()` or `rtracklayer::import()` of BED, WIG,
+GTF, and other common file formats).  Use `help()` to list the help
+pages in the `r Biocpkg("GenomicRanges")` package, and `vignettes()`
+to view and access available vignettes.
+
+```{r eval=FALSE}
+help(package="GenomicRanges")
+vignette(package="GenomicRanges")
+```
+
+Some of the common operations on `GRanges` include
+`findOverlaps(query, subject)` and `nearest(query, subject)`, which
+identify the ranges in `query` that overlap ranges in `subject`, or
+the range in `subject` nearest to `query. These operations are useful
+both in data analysis (e.g., counting overlaps between aligned reads
+and gene models in RNAseq) and comprehension (e.g., annotating genes
+near ChIP binding sites).
+
+# DNA /amino acid sequence from FASTA files
+
+`r Biocpkg("Biostrings")` classes (e.g., `DNAStringSet`) are used to
+represent DNA or amino acid sequences. In the example below we will
+construct a DNAString and show some manipulations.
+
+```{r message=FALSE}
+library(Biostrings)
+d <- DNAString("TTGAAAA-CTC-N")
+length(d)  #no of letters in the DNAString
+```
+
+We will download all _Homo sapiens_ cDNA sequences from the FASTA file
+'Homo_sapiens.GRCh38.cdna.all.fa' from Ensembl using
+`r Biocpkg("AnnotationHub")`.
+
+```{r eval=FALSE}
+library(AnnotationHub)
+ah <- AnnotationHub()
+```
+
+This file is downloaded as a FaFile which can be read in using
+`readFasta()` from the `r Biocpkg("ShortRead")` package
+
+```{r}
+ah2 <- query(ah, c("fasta", "homo sapiens", "Ensembl"))
+fa <- ah2[["AH18522"]]
+fa
+```
+
+We will open the file and get the sequences and widths of the records
+in the the fasta file using `r Biocpkg("Rsamtools")`.
+
+```{r}
+library(Rsamtools)
+idx <- scanFaIndex(fa)
+idx
+```
+
+The information is returned as a _GRanges_ object. `getSeq()` returns
+the sequences indicated by param as a DNAStringSet instance.
+
+```{r}
+long <- idx[width(idx) > 82000]
+getSeq(fa, param=long)
+```
+
+`r Biocpkg("BSgenome")` packages inside _Bioconductor_ contain whole
+genome sequences as distributed by ENSEMBL, NCBI and others.  In this
+next example we will load the whole genome sequence for _Homo sapiens_
+from UCSC's `hg19` build, and calculate the GC content across
+chromosome 14.
+
+```{r}
+library(BSgenome.Hsapiens.UCSC.hg19)
+
+chr14_range = GRanges("chr14", IRanges(1, seqlengths(Hsapiens)["chr14"]))
+chr14_dna <- getSeq(Hsapiens, chr14_range)
+letterFrequency(chr14_dna, "GC", as.prob=TRUE)
+```
+
+# Reads from FASTQ files
+
+`r Biocpkg("ShortRead")` package from _Bioconductor_ can be used for
+working with fastq files. Here we illustrate a quick example where one
+can read in multiple fasta files, collect some statistics and generate
+a report about the same.
+
+`r Biocpkg("BiocParallel")` is another package from _Bioconductor_ which 
+parallelizes this task and speeds up the process. 
+
+```{r eval=FALSE}
+## 1. attach ShortRead and BiocParallel
+library(ShortRead)
+library(BiocParallel)
+
+## 2. create a vector of file paths
+fls <- dir("~/fastq", pattern="*fastq", full=TRUE)
+
+## 3. collect statistics
+stats0 <- qa(fls)
+
+## 4. generate and browse the report
+if (interactive())
+    browseURL(report(stats0))
+```
+
+Two useful functions in `r Biocpkg("ShortRead")` are `trimTails()` for
+processing FASTQ files, and `FastqStreamer()` for iterating through
+FASTQ files in manageable chunks (e.g., 1,000,000 records at a time).
+
+# Aligned Reads from BAM files
+
+The `r Biocpkg("GenomicAlignments")` package is used to input reads
+aligned to a reference genome.
+
+In this next example, we will read in a BAM file and specifically read
+in reads supporting an apparent exon splice junction spanning position
+19653773 of chromosome 14.
+
+The package `r Biocexptpkg("RNAseqData.HNRNPC.bam.chr14_BAMFILES")`
+contains 8 BAM files. We will use only the first BAM file. We will
+load the software packages and the data package, construct a _GRanges_
+with our region of interest, and use `summarizeJunctions()` to find
+reads in our region of interest.
+
+```{r}
+## 1. load software packages
+library(GenomicRanges)
+library(GenomicAlignments)
+
+## 2. load sample data
+library('RNAseqData.HNRNPC.bam.chr14')
+bf <- BamFile(RNAseqData.HNRNPC.bam.chr14_BAMFILES[[1]], asMates=TRUE)
+
+## 3. define our 'region of interest'
+roi <- GRanges("chr14", IRanges(19653773, width=1)) 
+
+## 4. alignments, junctions, overlapping our roi
+paln <- readGAlignmentsList(bf)
+j <- summarizeJunctions(paln, with.revmap=TRUE)
+j_overlap <- j[j %over% roi]
+
+## 5. supporting reads
+paln[j_overlap$revmap[[1]]]
+```
+
+For a detailed tutorial on working with BAM files do check out this
+detailed [Overlap
+Encodings](http://bioconductor.org/packages/release/bioc/vignettes/GenomicAlignments/inst/doc/OverlapEncodings.pdf)
+vignette of GenomicAlignments.
+
+
+# Called Variants from VCF files
+
+VCF (Variant Call Files) describe SNP and other variants. The files
+contain meta-information lines, a header line with column names, and
+then (many!) data lines, each with information about a position in the
+genome, and optional genotype information on samples for each
+position.
+
+Data are parsed into a VCF object with `readVcf()`
+from `r Biocpkg("VariantAnnoation")`
+
+```{r}
+library(VariantAnnotation)
+fl <- system.file("extdata", "chr22.vcf.gz", package="VariantAnnotation")
+vcf <- readVcf(fl, "hg19")
+```
+
+An excellent workflow on working with Variants can be found
+[here](http://bioconductor.org/help/workflows/variants/). In
+particular it is possible to read in specific components of the VCF
+file (e.g., `readInfo()`, `readGeno()`) and parts of the VCF at
+specific genomic locations (using _GRanges_ and the `param = ScanVcfParam()`
+argument to input functions).
+
+
+# Genome Annotations from BED, WIG, GTF etc files
+
+`r Biocpkg("rtracklayer")` import and export functions can read in
+many common file types, e.g., BED, WIG, GTF, …, in addition to
+querying and navigating the UCSC genome browser.
+
+`r Biocpkg("rtracklayer")` contains a 'test' BED file which we will read in here
+
+```{r}
+library(rtracklayer)
+test_path <- system.file("tests", package = "rtracklayer")
+test_bed <- file.path(test_path, "test.bed")
+  
+test <- import(test_bed, format = "bed")
+test
+```
+
+The file is returned to the user as a _GRanges_ instance.  A more
+detailed tutorial can be found
+[here](http://bioconductor.org/packages/devel/bioc/vignettes/rtracklayer/inst/doc/rtracklayer.pdf)
+
+`r Biocpkg("AnnotationHub")` also contains a variety of genomic annotation files
+(eg BED, GTF, BigWig) which use import() from rtracklayer 
+behind the scenes. For a detailed tutorial the user is referred to
+[Annotation workflow](http://bioconductor.org/help/workflows/annotation/Annotation_Resources/)
+and [AnnotationHub HOW TO vignette](http://bioconductor.org/packages/devel/bioc/vignettes/AnnotationHub/inst/doc/AnnotationHub-HOWTO.html)
+
+```{r}
+sessionInfo()
+```

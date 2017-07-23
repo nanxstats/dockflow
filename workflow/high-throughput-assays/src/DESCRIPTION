@@ -1,0 +1,18 @@
+Package: highthroughputassays
+Title: Dummy Package
+Version: 0.99.120889
+Authors@R: person(role=c("aut", "cre"), "Bioconductor Package",
+        "Maintainer", email = "maintainer@bioconductor.org")
+Description: dummy package
+Depends: R (>= 3.4.0)
+License: Artistic-2.0
+Encoding: UTF-8
+LazyData: true
+VignetteBuilder: knitr
+biocViews: Workflows
+Imports: flowCore, flowStats, flowViz
+Suggests: knitr, knitcitations
+NeedsCompilation: no
+Packaged: 2017-04-26 15:15:53 UTC; jenkins
+Author: Bioconductor Package Maintainer [aut, cre]
+Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>

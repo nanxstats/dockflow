@@ -1,0 +1,46 @@
+maintainer: "Nan Xiao"
+email: "me@nanx.me"
+from: "rocker/tidyverse:latest"
+pandoc: false
+
+sysdeps:
+  - libgsl-dev
+  - ghostscript
+
+cran:
+  - rmdformats
+  - DT
+  - circlize
+  - c3net
+  - pbapply
+  - ggplot2
+  - ggthemes
+  - readr
+  - downloader
+
+bioc:
+  - TCGAWorkflowData
+  - TCGAbiolinks
+  - SummarizedExperiment
+  - RTCGAToolbox
+  - gaia
+  - GenomicRanges
+  - ComplexHeatmap
+  - clusterProfiler
+  - minet
+  - rGADEM
+  - BSgenome.Hsapiens.UCSC.hg19
+  - motifStack
+  - MotIV
+  - ChIPseeker
+  - AnnotationHub
+  - ELMER
+  - EDASeq
+  - GO.db
+  - DO.db
+  - MotifDb
+  - biomaRt
+  - GenomeInfoDb
+
+remotes:
+  - url::https://bioconductor.org/help/workflows/TCGAWorkflow/TCGAWorkflow_0.99.73.tar.gz

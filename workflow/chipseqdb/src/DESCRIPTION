@@ -1,0 +1,20 @@
+Package: chipseqDB
+Title: Dummy Package
+Version: 0.99.128314
+Authors@R: person(role=c("aut", "cre"), "Bioconductor Package",
+        "Maintainer", email = "maintainer@bioconductor.org")
+Description: dummy package
+Depends: R (>= 3.4.0)
+License: Artistic-2.0
+Encoding: UTF-8
+LazyData: true
+VignetteBuilder: knitr
+biocViews: Workflows
+Imports: BiocStyle, knitr, Rsubread, Rsamtools, rtracklayer, csaw,
+        edgeR, statmod, locfit, org.Mm.eg.db,
+        TxDb.Mmusculus.UCSC.mm10.knownGene, ChIPpeakAnno, Gviz
+Suggests: knitr, knitcitations
+NeedsCompilation: no
+Packaged: 2017-04-26 12:49:10 UTC; jenkins
+Author: Bioconductor Package Maintainer [aut, cre]
+Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>

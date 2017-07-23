@@ -1,0 +1,30 @@
+maintainer: "Nan Xiao"
+email: "me@nanx.me"
+from: "rocker/tidyverse:latest"
+pandoc: false
+
+sysdeps:
+  - libnetcdf-dev
+  - udunits-bin
+  - libudunits2-dev
+  - default-jre
+  - default-jdk
+
+cran:
+  - rmdformats
+  - nloptr
+
+bioc:
+  - BiocStyle
+  - RforProteomics
+  - mzR
+  - mzID
+  - MSnID
+  - MSnbase
+  - rpx
+  - MLInterfaces
+  - pRoloc
+  - pRolocdata
+  - MSGFplus
+  - rols
+  - hpar

@@ -1,0 +1,22 @@
+Package: rnaseqGene
+Title: Dummy Package
+Version: 0.99.130674
+Authors@R: person(role=c("aut", "cre"), "Bioconductor Package",
+        "Maintainer", email = "maintainer@bioconductor.org")
+Description: dummy package
+Depends: R (>= 3.4.0)
+License: Artistic-2.0
+Encoding: UTF-8
+LazyData: true
+VignetteBuilder: knitr
+biocViews: Workflows
+Imports: BiocStyle, knitr, rmarkdown, airway, Rsamtools,
+        GenomicFeatures, GenomicAlignments, BiocParallel, magrittr,
+        DESeq2, vsn, dplyr, ggplot2, pheatmap, RColorBrewer, PoiClaClu,
+        ggbeeswarm, genefilter, AnnotationDbi, org.Hs.eg.db, Gviz, sva,
+        fission
+Suggests: knitr, knitcitations
+NeedsCompilation: no
+Packaged: 2017-06-26 13:11:20 UTC; jenkins
+Author: Bioconductor Package Maintainer [aut, cre]
+Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>

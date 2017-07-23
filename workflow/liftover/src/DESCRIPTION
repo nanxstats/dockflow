@@ -1,0 +1,19 @@
+Package: liftOver
+Title: Dummy Package
+Version: 0.99.129508
+Authors@R: person(role=c("aut", "cre"), "Bioconductor Package",
+        "Maintainer", email = "maintainer@bioconductor.org")
+Description: dummy package
+Depends: R (>= 3.4.0)
+License: Artistic-2.0
+Encoding: UTF-8
+LazyData: true
+VignetteBuilder: knitr
+biocViews: Workflows
+Imports: gwascat, GenomicRanges, rtracklayer, Homo.sapiens,
+        BiocGenerics
+Suggests: knitr, knitcitations
+NeedsCompilation: no
+Packaged: 2017-05-10 11:37:06 UTC; jenkins
+Author: Bioconductor Package Maintainer [aut, cre]
+Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>

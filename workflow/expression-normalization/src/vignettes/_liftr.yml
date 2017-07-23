@@ -1,0 +1,18 @@
+maintainer: "Nan Xiao"
+email: "me@nanx.me"
+from: "rocker/tidyverse:latest"
+pandoc: false
+
+cran:
+  - rmdformats
+
+bioc:
+  - Biobase
+  - limma
+  - pvca
+  - snm
+  - sva
+  - vsn
+
+remotes:
+  - url::https://www.bioconductor.org/help/workflows/ExpressionNormalizationWorkflow/ExpressionNormalizationWorkflow_1.2.0.tar.gz

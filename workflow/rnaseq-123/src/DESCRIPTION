@@ -1,0 +1,22 @@
+Package: RNAseq123
+Title: RNA-seq analysis is easy as 1-2-3 with limma, Glimma and edgeR
+Version: 1.0.0
+Date: 2017-04-05
+Authors@R: c(person(role="aut", "Charity", "Law", email = "law@wehi.edu.au"), 
+                      person(role="aut", "Monther", "Alhamdoosh", email = "monther.alhamdoosh@csl.com.au"),
+                      person(role="aut", "Shian", "Su", email = "su.s@wehi.edu.au"),
+                      person(role="aut", "Gordon", "Smyth", email = "smyth@wehi.edu.au"),
+                      person(role=c("aut", "cre"), "Matthew", "Ritchie", email = "mritchie@wehi.edu.au"))
+Description: R package that supports the F1000Research workflow article on RNA-seq analysis using limma, Glimma and edgeR by Law et al. (2016).
+Depends: R (>= 3.3.0), Glimma (>= 1.1.9), limma, edgeR, Mus.musculus
+License: Artistic-2.0
+Encoding: UTF-8
+LazyData: true
+VignetteBuilder: knitr
+biocViews: RNASeq, DifferentialExpression
+Suggests: knitr, rmarkdown
+NeedsCompilation: no
+Author: Charity Law, Monther Alhamdoosh, Shian Su, Gordon Smyth and Matthew Ritchie
+Maintainer: Matthew Ritchie <mritchie@wehi.edu.au>
+URL: http://f1000research.com/articles/5-1408/
+Packaged: 2017-04-26 16:31:56 UTC; jenkins

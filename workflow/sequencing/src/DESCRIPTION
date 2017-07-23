@@ -1,0 +1,21 @@
+Package: sequencing
+Title: Dummy Package
+Version: 0.99.120890
+Authors@R: person(role=c("aut", "cre"), "Bioconductor Package",
+        "Maintainer", email = "maintainer@bioconductor.org")
+Description: dummy package
+Depends: R (>= 3.4.0)
+License: Artistic-2.0
+Encoding: UTF-8
+LazyData: true
+VignetteBuilder: knitr
+biocViews: Workflows
+Imports: GenomicRanges, GenomicAlignments, Biostrings, Rsamtools,
+        ShortRead, BiocParallel, rtracklayer, VariantAnnotation,
+        AnnotationHub, BSgenome.Hsapiens.UCSC.hg19,
+        RNAseqData.HNRNPC.bam.chr14
+Suggests: knitr, knitcitations
+NeedsCompilation: no
+Packaged: 2017-04-26 16:43:07 UTC; jenkins
+Author: Bioconductor Package Maintainer [aut, cre]
+Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>

@@ -1,0 +1,15 @@
+maintainer: "Nan Xiao"
+email: "me@nanx.me"
+from: "rocker/tidyverse:latest"
+pandoc: false
+
+cran:
+  - rmdformats
+
+bioc:
+  - VariantAnnotation
+  - cgdv17
+  - org.Hs.eg.db
+  - TxDb.Hsapiens.UCSC.hg19.knownGene
+  - BSgenome.Hsapiens.UCSC.hg19
+  - PolyPhen.Hsapiens.dbSNP131

@@ -1,0 +1,16 @@
+maintainer: "Nan Xiao"
+email: "me@nanx.me"
+from: "rocker/tidyverse:latest"
+pandoc: false
+
+cran:
+  - rmdformats
+
+bioc:
+  - VariantAnnotation
+  - AnnotationHub
+  - org.Hs.eg.db
+  - org.Mm.eg.db
+  - BSgenome.Hsapiens.UCSC.hg19
+  - TxDb.Hsapiens.UCSC.hg19.knownGene
+  - TxDb.Mmusculus.UCSC.mm10.ensGene

@@ -1,0 +1,24 @@
+maintainer: "Nan Xiao"
+email: "me@nanx.me"
+from: "rocker/tidyverse:latest"
+pandoc: false
+
+cran:
+  - rmdformats
+  - Rtsne
+  - mvoutlier
+  - R.utils
+  - readxl
+  - gplots
+
+bioc:
+  - BiocParallel
+  - scater
+  - scran
+  - org.Mm.eg.db
+  - RBGL
+  - limma
+  - dynamicTreeCut
+  - edgeR
+  - TxDb.Mmusculus.UCSC.mm10.ensGene
+  - BiocStyle

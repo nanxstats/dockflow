@@ -1,0 +1,7 @@
+exportPattern("^[[:alpha:]]+")
+import(VariantAnnotation)
+import(cgdv17)
+import(org.Hs.eg.db)
+import(TxDb.Hsapiens.UCSC.hg19.knownGene)
+import(BSgenome.Hsapiens.UCSC.hg19)
+import(PolyPhen.Hsapiens.dbSNP131)

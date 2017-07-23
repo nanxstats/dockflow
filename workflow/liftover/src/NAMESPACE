@@ -1,0 +1,6 @@
+exportPattern("^[[:alpha:]]+")
+import(gwascat)
+import(GenomicRanges)
+import(rtracklayer)
+import(Homo.sapiens)
+import(BiocGenerics)

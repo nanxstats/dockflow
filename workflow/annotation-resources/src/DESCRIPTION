@@ -1,0 +1,22 @@
+Package: annotation
+Title: Dummy Package
+Version: 0.99.129255
+Authors@R: person(role=c("aut", "cre"), "Bioconductor Package",
+        "Maintainer", email = "maintainer@bioconductor.org")
+Description: dummy package
+Depends: R (>= 3.4.0)
+License: Artistic-2.0
+Encoding: UTF-8
+LazyData: true
+VignetteBuilder: knitr
+biocViews: Workflows
+Imports: VariantAnnotation, AnnotationHub,
+        TxDb.Hsapiens.UCSC.hg19.knownGene,
+        TxDb.Mmusculus.UCSC.mm10.ensGene, org.Hs.eg.db, org.Mm.eg.db,
+        BSgenome.Hsapiens.UCSC.hg19, Homo.sapiens, BSgenome, biomaRt,
+        TxDb.Athaliana.BioMart.plantsmart22
+Suggests: knitr, knitcitations
+NeedsCompilation: no
+Packaged: 2017-04-28 16:04:15 UTC; jenkins
+Author: Bioconductor Package Maintainer [aut, cre]
+Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>

@@ -1,0 +1,295 @@
+---
+title: Annotating Genomic Variants
+author: Valerie Obenchain
+output:
+  rmdformats::readthedown:
+    toc_depth: 3
+    number_sections: true
+---
+
+# Background
+
+The VariantAnnotation package has facilities for reading in all or subsets
+of Variant Call Format (VCF) files. These text files contain meta-information
+lines, a header line and data lines each containing information about a 
+position in the genome. The format also may also contain genotype information 
+on samples for each position. More on the file format can be found in the
+[VCF specs](http://samtools.github.io/hts-specs/VCFv4.2.pdf).
+
+The 'locateVariants' function in the VariantAnnotation package identifies
+where a variant is located with respect to the gene model (e.g., exon, intron, 
+splice site, etc.). The 'predictCoding' function reports the amino acid
+change for non-synonymous coding variants. Consequences of the coding changes 
+can be investigated with the SIFT and PolyPhen database packages. We'll use
+these functions to learn about variants located on the TRPV gene on
+chromosome
+
+# Set Up
+
+This workflow requires several different Bioconductor packages. Usage of each
+will be described in detail in the following sections.
+
+```{r, echo=FALSE}
+suppressPackageStartupMessages(library(VariantAnnotation))
+suppressMessages(suppressPackageStartupMessages(library(cgdv17)))
+suppressPackageStartupMessages(library(org.Hs.eg.db))
+suppressPackageStartupMessages(library(TxDb.Hsapiens.UCSC.hg19.knownGene))
+suppressPackageStartupMessages(library(BSgenome.Hsapiens.UCSC.hg19))
+suppressPackageStartupMessages(library(PolyPhen.Hsapiens.dbSNP131))
+```
+
+```{r, eval=FALSE}
+library(VariantAnnotation)
+library(cgdv17)
+library(org.Hs.eg.db)
+library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+library(BSgenome.Hsapiens.UCSC.hg19)
+library(PolyPhen.Hsapiens.dbSNP131)
+```
+
+Use biocLite() to get the packages you don't have installed:
+
+```{r, eval=FALSE} 
+## try http:// if https:// URLs are not supported
+source("https://bioconductor.org/biocLite.R")
+biocLite("mypackage")
+```
+
+# Exploring variants in the TRPV gene family
+
+This workflow focuses on variants located in the Transient Receptor 
+Potential Vanilloid (TRPV) gene family on chromosome 17. Sample data are 
+from the Bioconductor cgdv17 experimental data package which contains
+Complete Genomics Diversity panel data for chromosome 17 on 46 individuals.
+For more background on how these data were curated see the package vignette.
+
+```{r, eval=FALSE}
+browseVignettes("cgdv17")
+```
+
+We use a VCF file from the package that is a subset of chromosome 17 for a 
+single individual from the CEU population.
+
+```{r}
+library(VariantAnnotation)
+library(cgdv17)
+file <- system.file("vcf", "NA06985_17.vcf.gz", package = "cgdv17")
+``` 
+
+## Examine header data in a vcf file
+
+To get an idea of what data are in the file we look at the header.
+scanVcfHeader() parses the file header into a VCFHeader object and the
+info() and geno() accessors extract field-specific data.
+
+```{r}
+hdr <- scanVcfHeader(file)
+ 
+info(hdr) 
+ 
+geno(hdr) 
+```
+
+Variants in the VCF have been aligned to NCBI genome build GRCh37:
+
+```{r}
+meta(hdr)$META
+```
+
+<p class="back_to_top">[ <a href="#top">Back to top</a> ]</p>
+
+## Convert gene symbols to gene ids
+
+Use the org.Hs.eg.db package to convert gene symbols to gene ids.
+
+```{r}
+## get entrez ids from gene symbols
+library(org.Hs.eg.db)
+genesym <- c("TRPV1", "TRPV2", "TRPV3")
+geneid <- select(org.Hs.eg.db, keys=genesym, keytype="SYMBOL",
+                 columns="ENTREZID")
+geneid
+```
+<p class="back_to_top">[ <a href="#top">Back to top</a> ]</p>
+
+## Create gene ranges
+
+We use the hg19 known gene track from UCSC to identify the TRPV gene ranges.
+These ranges will eventually be used to extract variants from a regions in
+the VCF file.
+
+Load the annotation package.
+
+```{r}
+library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+txdb
+```
+
+Our VCF file was aligned to a genome from NCBI and the known gene track was
+from UCSC. These institutions have different naming conventions for the
+chromosomes. In order to use these two pieces of data in a matching
+or overlap operation the chromosome names (also called sesqlevels) need to
+match. We will modify the txdb to match the VCF file.
+
+```{r}
+txdb <- renameSeqlevels(txdb, gsub("chr", "", seqlevels(txdb)))
+txdb <- keepSeqlevels(txdb, "17")
+```
+
+Create a list of transcripts by gene:
+
+```{r}
+txbygene = transcriptsBy(txdb, "gene")
+```
+
+Create the gene ranges for the TRPV genes
+
+```{r}
+gnrng <- unlist(range(txbygene[geneid$ENTREZID]), use.names=FALSE)
+names(gnrng) <- geneid$SYMBOL
+```
+
+<p class="back_to_top">[ <a href="#top">Back to top</a> ]</p>
+
+## Extract variant subsets
+
+A ScanVcfParam object is used to retrieve data subsets. This object
+can specify genomic coordinates (ranges) or individual VCF elements.
+Extractions of ranges (vs fields) requires a tabix index.
+See ?indexTabix for details.
+
+```{r}
+param <- ScanVcfParam(which = gnrng, info = "DP", geno = c("GT", "cPd"))
+param
+ 
+## Extract the TRPV ranges from the VCF file 
+vcf <- readVcf(file, "hg19", param)
+## Inspect the VCF object with the 'fixed', 'info' and 'geno' accessors
+vcf
+ 
+head(fixed(vcf))
+
+geno(vcf)
+```
+
+<p class="back_to_top">[ <a href="#top">Back to top</a> ]</p>
+
+## Variant location in the gene model
+
+The locateVariants function identifies where a variant falls with respect to
+gene structure, e.g., exon, utr, splice site, etc. We use the gene model
+from the TxDb.Hsapiens.UCSC.hg19.knownGene package loaded eariler.
+
+```{r, eval=FALSE} 
+## Use the 'region' argument to define the region
+## of interest. See ?locateVariants for details.
+cds <- locateVariants(vcf, txdb, CodingVariants())
+five <- locateVariants(vcf, txdb, FiveUTRVariants())
+splice <- locateVariants(vcf, txdb, SpliceSiteVariants())
+intron <- locateVariants(vcf, txdb, IntronVariants())
+```
+
+```{r}
+all <- locateVariants(vcf, txdb, AllVariants())
+```
+ 
+Each row in cds represents a variant-transcript match so multiple rows
+per variant are possible. If we are interested in gene-centric questions
+the data can be summarized by gene regardless of transcript.
+
+```{r} 
+## Did any variants match more than one gene?
+table(sapply(split(mcols(all)$GENEID, mcols(all)$QUERYID), 
+      function(x) length(unique(x)) > 1))
+ 
+## Summarize the number of variants by gene:
+idx <- sapply(split(mcols(all)$QUERYID, mcols(all)$GENEID), unique)
+sapply(idx, length)
+ 
+## Summarize variant location by gene:
+sapply(names(idx), 
+    function(nm) {
+        d <- all[mcols(all)$GENEID %in% nm, c("QUERYID", "LOCATION")]
+        table(mcols(d)$LOCATION[duplicated(d) == FALSE])
+    })
+```
+ 
+<p class="back_to_top">[ <a href="#top">Back to top</a> ]</p>
+
+## Amino acid coding changes in non-synonymous variants
+
+Amino acid coding for non-synonymous variants can be computed
+with the function predictCoding. The BSgenome.Hsapiens.UCSC.hg19 
+package is used as the source of the reference alleles. Variant 
+alleles are provided by the user.
+
+```{r}
+library(BSgenome.Hsapiens.UCSC.hg19)
+seqlevelsStyle(vcf) <- "UCSC"
+seqlevelsStyle(txdb) <- "UCSC"
+aa <- predictCoding(vcf, txdb, Hsapiens)
+```
+ 
+predictCoding returns results for coding variants only. As with 
+locateVariants, the output has one row per variant-transcript match
+so multiple rows per variant are possible.
+
+```{r} 
+## Did any variants match more than one gene?
+table(sapply(split(mcols(aa)$GENEID, mcols(aa)$QUERYID), 
+        function(x) length(unique(x)) > 1))
+
+## Summarize the number of variants by gene:
+idx <- sapply(split(mcols(aa)$QUERYID, mcols(aa)$GENEID, drop=TRUE), unique)
+sapply(idx, length)
+
+## Summarize variant consequence by gene:
+sapply(names(idx), 
+       function(nm) {
+           d <- aa[mcols(aa)$GENEID %in% nm, c("QUERYID","CONSEQUENCE")]
+           table(mcols(d)$CONSEQUENCE[duplicated(d) == FALSE])
+       })
+```
+ 
+The variants 'not translated' are explained by the warnings thrown when
+predictCoding was called. Variants that have a missing varAllele or have an
+'N' in the varAllele are not translated. If the varAllele substitution had
+resulted in a frameshift the consequence would be 'frameshift'. See
+?predictCoding for details.
+ 
+<p class="back_to_top">[ <a href="#top">Back to top</a> ]</p>
+
+
+# Exploring Package Content
+
+Packages have extensive help pages, and include vignettes highlighting
+common use cases. The help pages and vignettes are available from
+within R. After loading a package, use syntax like
+
+    help(package="VariantAnnotation")
+    ?predictCoding
+
+to obtain an overview of help on the `VariantAnnotation` package, and 
+the `predictCoding` function. View the package vignette with
+
+```{r eval=FALSE}
+browseVignettes(package="VariantAnnotation")
+```
+
+To view vignettes providing a more comprehensive introduction to
+package functionality use
+
+```{r eval=FALSE}
+help.start()
+```
+
+<p class="back_to_top">[ <a href="#top">Back to top</a> ]</p>
+
+# sessionInfo()
+
+```{r}
+sessionInfo()
+```
+
+<p class="back_to_top">[ <a href="#top">Back to top</a> ]</p>

@@ -1,0 +1,15 @@
+maintainer: "Nan Xiao"
+email: "me@nanx.me"
+from: "rocker/tidyverse:latest"
+pandoc: false
+
+cran:
+  - rmdformats
+  - gplots
+  - statmod
+
+bioc:
+  - RnaSeqGeneEdgeRQL
+  - edgeR
+  - org.Mm.eg.db
+  - GO.db

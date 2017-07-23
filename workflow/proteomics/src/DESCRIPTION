@@ -1,0 +1,20 @@
+Package: proteomics
+Title: Dummy Package
+Version: 0.99.130294
+Authors@R: person(role=c("aut", "cre"), "Bioconductor Package",
+        "Maintainer", email = "maintainer@bioconductor.org")
+Description: dummy package
+Depends: R (>= 3.4.0)
+License: Artistic-2.0
+Encoding: UTF-8
+LazyData: true
+VignetteBuilder: knitr
+biocViews: Workflows
+Imports: knitr, BiocInstaller, BiocStyle, RforProteomics, nloptr, mzR,
+        mzID, MSnID, MSnbase, rpx, MLInterfaces, pRoloc, pRolocdata,
+        MSGFplus, rols, hpar
+Suggests: knitr, knitcitations
+NeedsCompilation: no
+Packaged: 2017-06-20 13:31:03 UTC; jenkins
+Author: Bioconductor Package Maintainer [aut, cre]
+Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>

@@ -1,0 +1,13 @@
+Package: arrays
+Title: Using Bioconductor for Microarray Analysis
+Version: 0.1
+Authors@R: person(role=c("aut", "cre"), "Bioconductor Package", "Maintainer", email = "maintainer@bioconductor.org")
+Description: Using Bioconductor for Microarray Analysis workflow
+Depends: R (>= 3.0.0)
+License: Artistic-2.0
+Suggests: affy, limma, hgfocuscdf, knitr, rmarkdown
+VignetteBuilder: knitr
+NeedsCompilation: no
+Packaged: 2017-04-26 12:12:58 UTC; jenkins
+Author: Bioconductor Package Maintainer [aut, cre]
+Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>

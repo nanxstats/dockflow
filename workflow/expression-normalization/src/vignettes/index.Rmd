@@ -1,0 +1,250 @@
+---
+title: "Gene Expression Normalization Workflow"
+author:
+  name: Karthikeyan Murugesan and Greg Gibson
+  affiliation: 
+  - Georgia Institute of Technology, Atlanta, USA
+  - http://cig.gatech.edu
+output:
+  rmdformats::readthedown:
+    toc_depth: 3
+    number_sections: true
+bibliography: references.bib
+csl: biometrics.csl
+---
+
+# Introduction
+
+Every Gene Expression study has an underlying question which the experimenter tries to address.Before proceeding towards any downstream analysis, the researcher has to decide how to normalize the gene expression data to minimize the impact of technical and other confounding factors on estimation of the environmental or biological factors of interest.  One approach is to simply remove all of the major principal components of variation or specified technical effects, but this can also remove the biological signal of interest.Supervised normalization strategies encourage the user to define the major parameters influencing the expression variation, and then systematically remove them while shielding the biological factors of interest.  
+  Here we outline a dynamic workflow that recognizes that there is not any ‘one algorithm fits all data sets’ analysis approach that works for every experiment.The workflow employs three successive procedures available in Bioconductor: Principal Variance Component Analysis (PVCA) to explore how technical and biological factors correlate with the major components of variance in the data set; Surrogate Variable Analysis (SVA) to identify major unwanted sources of variation; and Supervised Normalization of Microarrays (SNM) to efficiently remove these sources of variation while retaining the biological factor(s) of interest.
+The data is based on a study contrasting peripheral blood gene expression in acute myocardial infarction and coronary artery disease patients, described in @dataRef. Only a subset of the data is used, and the labels have been changed for privacy protection, but the full data set is accessible from the GEO data repository at 
+http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE49925.
+
+# Package Content
+
+The workflow package contains five functions:  
+1.  expSetobj – function to create an Expression Set Object which encapsulates the expression values, covariate information, and the experimental metadata  
+2.  pvcAnaly - Principal Variance Component Analysis functionality  
+3.	surVarAnaly – function which identifies hidden or new surrogate variables that are potential covariates hidden in the data  
+4.	conTocat – function to convert continuous variables to categorical variables (discretize)  
+5.	snmAnaly – function which implements the Supervised Normalization of Microarrays (SNM) normalization technique
+
+
+## Sample data  
+
+The workflow runs on these sample two data files:  
+1. CAD_Expression.csv - file containing gene expression values (8000 probes for 100 samples)  
+2. CAD_Exptdsgn.csv - file containing the phenotype information (100 samples with 10 covariates)  
+ The covariates are Study (a large batch effect since samples were run 2 years apart), Rin (RNA integrity number, a measure of RNA quality), BMI, Age, Gender, CAD (disease status as Acute MI or Fine at the time of sampling of patients in a CAD cohort), Rin3, BMI3, Age3 (discrete categorizations of the three continuous measures, used in the PVCA), and Array (a sample number)
+  The concept of the analysis is to explore how adjusting for Study, Rin, and other covariates if desired, influences the interpretation of the impact of CAD on gene expression.That is, CAD is the biological variable of interest.
+
+
+# Workflow steps
+
+## A. Reading Input Data
+
+1. File containing the gene expression values (log transformed)  
+Format - Features x Samples (where the features could be probes in the case of microarrays, or gene or exon names in the case of RNASeq data), preferably a comma separated file (.csv)
+2. File containing the covariates  
+Covariates are the different phenotypes that describe sample attributes, and can be biological, technical, or environmental.In the workflow we will also identify hidden covariates  
+Format - Samples x Covariates, preferably a comma separated file (.csv)
+
+You should start by examining the sample data to get an idea of how the files should be structured.
+
+
+```{r eval=TRUE, echo=FALSE}
+## Note, this workflow requires R version 3.3.1 or later, which can be installed from https://cran.r-project.org/bin/windows/base/
+## Load required packages from: BiocLite
+
+# source("https://bioconductor.org/biocLite.R")
+# biocLite()
+## You may get messages letting you know which packages are old or masked, and asking you whether to update all, some, or none of the packages
+
+## BiocGenerics and parallel will be installed, while various packages are masked, and you are welcomed to Bioconductor
+
+## Load the Expression Normalization Workflow from Bioconductor
+library(ExpressionNormalizationWorkflow)
+library(Biobase)
+```
+
+
+```{r eval=FALSE, echo=TRUE}
+## Set your working directory (or use Control + Shift + H to choose it)
+setwd("working directory")
+## read in the file containing the gene expression values
+expData_file_name <- system.file("folder containing the data", "CAD_Expression.csv", package="ExpressionNormalizationWorkflow")
+exprs <- read.table(expData_file_name, header=TRUE, sep=",", row.names=1, as.is=TRUE)
+## read in the file containing the covariates
+expDesign_file_name <- system.file("folder containing the data", "CAD_ExptDsgn.csv", package="ExpressionNormalizationWorkflow")
+covrts <- read.table(expDesign_file_name, header=TRUE, sep=",", row.names=1, as.is=TRUE)
+
+```
+
+
+```{r eval=TRUE, echo=FALSE}
+## read in the file containing the gene expression values
+exprs_path <- system.file("extdata", "CAD_Expression.csv", package="ExpressionNormalizationWorkflow")
+exprs <- read.table(exprs_path, header=TRUE, sep=",", row.names=1, as.is=TRUE)
+## read in the file containing the covariates
+covrts_path <- system.file("extdata", "CAD_ExptDsgn.csv", package="ExpressionNormalizationWorkflow")
+covrts <- read.table(covrts_path, row.names=1, header=TRUE, sep=",")
+## Confirm that the Expression data and the Covariates/Experimental design data is correctly uploaded
+## You can also view the complete Covariate matrix with - View(covrts)
+exprs[1:5, 1:5]
+covrts[1:5, 1:10]
+# View(covrts)
+covrts
+```
+
+## B. Creating an ExpressionSet Object
+
+An ExpressionSet Class [@Ref1] is a Biobase data structure that is used to conveniently store experimental information and associated meta data, all in one place. This command creates an object of the the ExpressionSet Class, which stores the gene expression values and the covariate data.The function GEOquery [@Ref5] can be used to download ExpressionSet objects from directly from GEO (https://www.ncbi.nlm.nih.gov/gds)
+
+```{r eval=TRUE}
+inpData <- expSetobj(exprs, covrts)
+```
+
+## C. Principal Variance Component Analysis of the raw data
+
+PVCA [@Ref2] estimates the proportion of the variance of the principal components of the gene expression data that can be attributed to each of the given covariates.The remaining fraction is assigned as “residual” variance.It efficiently combines principal component analysis (PCA) to reduce the feature space and variance component analysis (VCA) which fits a mixed linear model using factors of interest as random effects to estimate and partition the total variability. The variance explained is computed as a weighted average of the contributions of each factor to each PC, and you have the option of specifying how many principal components to include, by setting a threshold amount of the variance that needs to be explained by the identified PCs.
+  Here PVCA is used to estimate the proportion of variance due to CAD as well as due to the covariates like Gender, BMI, Rin, and Study.Since BMI and Rin are continuous variables, we use a categorization of each into Obese, Overweight, Normal weight and High, Moderate, and Low quality RNA respectively, through the BMI3 and Rin3 columns.
+  
+```{r eval=TRUE}
+## Set the covariates whose effect size on the data needs to be calculated
+cvrts_eff_var <- c("CAD", "BMI3", "Rin3", "Gender", "Study")
+## Set a PVCA Threshold Value between 0 & 1
+## PVCA Threshold Value is the percentile value of the minimum amount of the variabilities that the selected principal components need to explain, here requiring 75% of the expression variance to be captured by the PCs
+pct_thrsh <- 0.75 
+## Perform the PVCA analysis
+pvcAnaly(inpData, pct_thrsh, cvrts_eff_var)
+```
+The analysis (also generated as a histogram) shows that the Study batch effect is a major technical artifact that explains ~27% of the expression variance.In comparison, CAD and BMI each only explain around 4% of the variance, RNA quality less than 3%, and Gender is a minor component.60% of the variance is residual.
+
+## D. Surrogate Variable Analysis 
+
+Surrogate variables [@Ref3] are covariates constructed directly from high-dimensional data (gene expression or RNA-Seq data) that can be used in subsequent analyses to adjust for unknown/unmodeled covariates or latent sources of noise. The user provides one or more biological variable(s) that they are interested in estimating, and then estimates the surrogate variables (sv) given the presence of the biological signal. These are then appended as new covariates to the existing list of covariates, and we also add a step to convert them to categorical variables so as to estimate their contributions to the total variance.For a thorough introduction to SVA, refer to the paper by @Ref3 .SVA is available from Bioconductor at https://bioconductor.org/packages/release/bioc/html/sva.html, and a version specifically for RNASeq data (svaseq) is also available from Github at https://github.com/jtleek/svaseq.
+
+```{r eval=TRUE}
+## Choose a biological variable that is to be used to calculate the surrogate variables
+biol_var_sva <- "CAD" 
+## Perform SVA
+sur_var_obj <- surVarAnaly(inpData, biol_var_sva)
+## The newly generated surrogate variables sv1 through sv4 are appended to the ExpressionSet object
+inpData_sv <- sur_var_obj$expSetobject
+```
+
+## E. Computing the correlation between the surrogate variables and the covariates
+
+This step helps the researcher explore whether each newly identified surrogate variable is entirely independent of all the existing covariates or if they are correlated with either a technical factor or one of the biological covariates. If they are associated with a biological factor (especially the focus of the analysis, in this case CAD), then it would not be advisable to remove them during the normalization step, though they might be adjusted for.Otherwise, it will usually be advisable to remove them, or to remove the technical factor they capture.To see the correlations, we run a series of generalized linear models where the identified surrogate variables are modeled as a function of the existing covariates (Study, CAD, Rin, BMI; you could add Gender and Age if you wish – but they are not significant). 
+
+```{r eval=TRUE}
+## Fit a generalized linear model for sv1
+glm.sv1 <- glm(pData(inpData_sv)[,"sv1"]~pData(inpData_sv)[,"BMI"]+pData(inpData_sv)[,"Rin"]+pData(inpData_sv)[,"CAD"]
+               +pData(inpData_sv)[,"Study"]) 
+summary(glm.sv1)
+```
+The analysis shows that the Study batch effect is very strongly associated with sv1.You can also see this by plotting the two measures from the pData(inpData_sv) file.
+  Subsequent analyses of sv2 through sv4 with similar code shows that BMI is weakly associated with sv2, but strongly with sv3 (as is Study), while Rin is strongly associate with sv4.CAD is not associated with any of the surrogate variables, but Age contributes slightly to sv2 and sv3.
+```{r eval = TRUE}
+## Fit a generalized linear model for sv2
+glm.sv2 <- glm(pData(inpData_sv)[,"sv2"]~pData(inpData_sv)[,"BMI"]+pData(inpData_sv)[,"Rin"]+pData(inpData_sv)[,"CAD"]
+               +pData(inpData_sv)[,"Study"]) 
+summary(glm.sv2)
+## Output should be similar to that shown above for sv1
+```
+
+## F. Principal Variance Component Analysis of the raw data with the surrogate variables included as covariates
+The following PVCA step is performed to estimate the contributions of the newly identified surrogate variables to the overall expression variance, with or without the Study covariate in the model.
+
+```{r eval=TRUE}
+
+## First discretize the continuous surrogate variables 
+var_names <- c("sv1", "sv2", "sv3", "sv4") 
+pData(inpData_sv)<-conTocat(pData(inpData_sv), var_names) 
+## View them appended to the covariate matrix as additional covariate columns
+# View(pData(inpData_sv))
+pData(inpData_sv)
+## Include the surrogate variables as covariates in addition to BMI3, Rin3, CAD and Study (be sure to use categorical measures of BMI and Rin rather than the continuous measure)
+cvrts_eff_var <- c("BMI3", "Rin3", "CAD", "Study", "sv1_cat", "sv2_cat", "sv3_cat", "sv4_cat")
+## Again set the PVCA Threshold to explain 75% of the expression variation
+pct_thrsh <- 0.75 
+## Perform PVCA
+pvcAnaly(inpData_sv, pct_thrsh, cvrts_eff_var) 
+```
+The analysis shows that each of the surrogate variables capture a large amount of the variance, while the Study batch effect remains important.The residual variance has reduced by almost half to 36%.For comparison, remove Study to see how much of it the surrogate variables capture
+
+```{r eval=TRUE}
+cvrts_eff_var <- c("BMI3", "Rin3", "CAD","sv1_cat", "sv2_cat", "sv3_cat", "sv4_cat")
+## Again set the PVCA Threshold to explain 75% of the expression variation
+pct_thrsh <- 0.75 
+## Perform PVCA
+pvcAnaly(inpData_sv, pct_thrsh, cvrts_eff_var)
+
+```
+This implies that together the 4 SVs capture as much variance as Study alone.Both analyses have slightly reduced the CAD contribution relative to the analysis without surrogate variables.
+
+## G. Supervised normalization of Microarrays
+
+SNM [@Ref4] is a study specific, customizable normalization approach that adjusts for specified biological and technical variables as far as possible without biasing the estimate of the biological source of interest. Much like SVA, the user chooses the biological variable(s), and then fits desired covariates, while also allowing for “intensity dependent” effects (here, just array/sample differences) to be adjusted for. 
+  The SNM software at http://www.bioconductor.org/packages/release/bioc/html/snm.html actually allows you to either remove the adjustment variables using the rm=TRUE option, or simply to fit them.You can also run both sequentially with different covariates (for example, removing a batch effect but adjusting for gender). SNM fits both categorical and continuous variables.In the workflow below we remove the Study or the surrogate variable effects, running 5 iterations.
+  
+```{r eval=TRUE}
+## Choose the biological variableof interest
+bv <- c("CAD")
+## Choose your adjustment variable of interest, starting with just 'Study'
+av <- c("Study") 
+## The intensity-dependent adjustment variables adjust for array effects 
+iv <- c("Array") 
+## Run SNM
+sv_snmObj <- snmAnaly(exprs, pData(inpData_sv), bv, av, iv) 
+```
+
+After 5 iterations, the π~0~ estimate suggests that almost 63% of the probes are true negatives for the CAD effect: in other words, that there is evidence that just over one third of the probes are differentially expressed with acute MI. This is seen as an enrichment of transcripts with small p-values. 
+At each iteration, the π~0~ estimates should have been 0.92, 0.62, 0.63, 0.63 , 0.63 implying convergence.
+The output .csv file should have been saved to your working directory as “snm_normalized_data.csv”.
+
+```{r eval=FALSE, echo=TRUE}
+## Now choose the adjustment variables to be all four SVs plus Rin
+av <- c("Rin", "sv1", "sv2", "sv3", "sv4")
+## Run SNM
+sv_snmObj <- snmAnaly(exprs, pData(inpData_sv), bv, av, iv) 
+```
+This time the π~0~ estimates are 0.76, 0.75, 0.76, 0.76 and 0.75.However, the intensity-dependent effects are reduced considerably.A third possibility is to remove Study, Rin and sv2 (which is independent).This time the π~0~ estimates are 0.59, 0.54, 0.60, 0.63 and 0.64, and the intensity-dependent effects are more similar to the first model.The SNM ietrations are shown below-
+
+```{r eval=TRUE, echo=TRUE}
+av <- c("Rin", "sv2", "Study")
+sv_snmObj <- snmAnaly(exprs, pData(inpData_sv), bv, av, iv)
+```
+
+```{r eval=TRUE}
+## Create an expressionSet object of the normalized dataset(s)
+sv_snmNorm_data <- sv_snmObj$norm.dat
+colnames(sv_snmNorm_data) <- colnames(exprs)
+sv_snm_data <- expSetobj(sv_snmNorm_data, pData(inpData_sv))
+
+## Write this dateset to a table with rows as genes and columns as samples (with names the same as that from the input file)
+write.table(sv_snmNorm_data, file="CAD_SNM.csv", sep=",")
+```
+
+## H. Principal Variance Component Analysis on the normalized data
+
+This post SNM PVCA asks how the process of SNM has influenced the estimated contributions of the various covariates.  SNM brings down their effect to a minimal possible value while trying to preserve the variation due to the biological signals.
+
+```{r eval=TRUE}
+## Specify the covariates whose effect size is to be calculated
+cvrts_eff_var <- c("BMI3", "Rin3", "CAD", "sv1_cat", "sv2_cat","sv3_cat", "sv4_cat")
+## If needed, keep the same PC Threshold Value
+pct_thrsh <- 0.75 
+## Perform PVCA
+pvcAnaly(sv_snm_data, pct_thrsh, cvrts_eff_var)
+```
+Fitting Study, sv2, and RIN has not completely removed those effects, but they are much reduced, and the residual unexplained variance is back up to 69%.Most of it is probably among individual differences.The CAD effect remains low, at 2% of the variance, but is slightly increased on the raw data, whereas BMI has dropped to 1%.The sv3 and sv4 effects have not been removed.
+
+**Further exploration of different normalization approaches should help you decide whether the data is now ap for downstream analysis.**
+
+# Discussion
+
+The workflow presents a general strategy for exploring how technical and biological factors influence the inference of gene expression differences between categories of interest.The PVCA routine identifies how much of the variance is explained by given covariates; the SVA routine finds latent variables not influenced by the biological factor; and the SNM normalizes the data set by removing known or unknown sources of variance – in this case including a large batch effect. Readers are encouraged to compare the distributions of overall transcript abundance before and after normalization to gain a sense of the impact of the procedures on the data set.
+Although the impact on detection of genes influences by acute MI was minimal in the sub-set of the @dataRef data, application to the full data set has a larger influence.Similar strategies can be applied to RNASeq data, with the complication that low expression values have higher variance and are generally dealt with differently.
+
+# References

@@ -1,0 +1,24 @@
+maintainer: "Nan Xiao"
+email: "me@nanx.me"
+from: "rocker/tidyverse:latest"
+pandoc: false
+
+sysdeps:
+  - samtools
+
+cran:
+  - rmdformats
+
+bioc:
+  - BiocStyle
+  - GenomicRanges
+  - GenomicAlignments
+  - Biostrings
+  - Rsamtools
+  - ShortRead
+  - BiocParallel
+  - rtracklayer
+  - VariantAnnotation
+  - AnnotationHub
+  - BSgenome.Hsapiens.UCSC.hg19
+  - RNAseqData.HNRNPC.bam.chr14

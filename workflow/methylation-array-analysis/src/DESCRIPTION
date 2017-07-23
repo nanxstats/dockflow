@@ -1,0 +1,32 @@
+Package: methylationArrayAnalysis
+Title: A cross-package Bioconductor workflow for analysing methylation
+        array data.
+Version: 0.99.7
+Authors@R: person(role=c("aut", "cre"), "Bioconductor Package",
+        "Maintainer", email = "maintainer@bioconductor.org")
+Description: Methylation in the human genome is known to be associated with 
+        development and disease. The Illumina Infinium methylation arrays are by far 
+        the most common way to interrogate methylation across the human genome. This 
+        Bioconductor workflow uses multiple packages for the analysis 
+        of methylation array data. Specifically, we demonstrate the steps involved in a 
+        typical differential methylation analysis pipeline including: quality control, 
+        filtering, normalization, data exploration and statistical testing for 
+        probe-wise differential methylation. We further outline other analyses such as 
+        differential methylation of regions, differential variability analysis, 
+        estimating cell type composition and gene ontology testing. Finally, we provide 
+        some examples of how to visualise methylation array data.
+Depends: R (>= 3.3.0)
+License: Artistic-2.0
+Encoding: UTF-8
+LazyData: true
+VignetteBuilder: knitr
+biocViews: Workflows
+Suggests: knitr, rmarkdown, BiocStyle, limma, minfi,
+        IlluminaHumanMethylation450kanno.ilmn12.hg19,
+        IlluminaHumanMethylation450kmanifest, RColorBrewer, missMethyl,
+        matrixStats, minfiData, Gviz, DMRcate, stringr,
+        FlowSorted.Blood.450k
+NeedsCompilation: no
+Author: Bioconductor Package Maintainer [aut, cre]
+Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>
+Packaged: 2017-04-26 15:48:40 UTC; jenkins

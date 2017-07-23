@@ -1,0 +1,20 @@
+Package: variants
+Title: Dummy Package
+Version: 0.99.129254
+Authors@R: person(role=c("aut", "cre"), "Bioconductor Package",
+        "Maintainer", email = "maintainer@bioconductor.org")
+Description: dummy package
+Depends: R (>= 3.4.0)
+License: Artistic-2.0
+Encoding: UTF-8
+LazyData: true
+VignetteBuilder: knitr
+biocViews: Workflows
+Imports: VariantAnnotation, cgdv17, org.Hs.eg.db,
+        TxDb.Hsapiens.UCSC.hg19.knownGene, BSgenome.Hsapiens.UCSC.hg19,
+        PolyPhen.Hsapiens.dbSNP131
+Suggests: knitr, knitcitations
+NeedsCompilation: no
+Packaged: 2017-04-28 15:21:56 UTC; jenkins
+Author: Bioconductor Package Maintainer [aut, cre]
+Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>

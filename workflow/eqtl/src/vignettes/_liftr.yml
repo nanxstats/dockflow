@@ -1,0 +1,27 @@
+maintainer: "Nan Xiao"
+email: "me@nanx.me"
+from: "rocker/tidyverse:latest"
+pandoc: false
+
+cran:
+  - rmdformats
+  - knitcitations
+  - bibtex
+  - scatterplot3d
+  - foreach
+  - doParallel
+  - biglm
+  - rmeta
+  - reshape2
+  - ggplot2
+
+bioc:
+  - GGdata
+  - SNPlocs.Hsapiens.dbSNP144.GRCh37
+  - GenomeInfoDb
+  - S4Vectors
+  - GGtools
+  - yri1kgv
+  - snpStats
+  - lumi
+  - lumiHumanAll.db

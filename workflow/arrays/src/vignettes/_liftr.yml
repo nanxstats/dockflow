@@ -1,0 +1,15 @@
+maintainer: "Nan Xiao"
+email: "me@nanx.me"
+from: "rocker/tidyverse:latest"
+pandoc: false
+
+cran:
+  - rmdformats
+
+bioc:
+  - limma
+  - affy
+  - hgfocuscdf
+
+remotes:
+  - url::https://bioconductor.org/help/workflows/arrays/arrays_0.1.tar.gz

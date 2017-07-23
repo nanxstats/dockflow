@@ -1,0 +1,21 @@
+maintainer: "Nan Xiao"
+email: "me@nanx.me"
+from: "rocker/tidyverse:latest"
+pandoc: false
+
+cran:
+  - rmdformats
+  - knitr
+  - RColorBrewer
+  - gplots
+  - R.utils
+
+bioc:
+  - BiocStyle
+  - limma
+  - Glimma
+  - edgeR
+  - Mus.musculus
+
+remotes:
+  - url::https://www.bioconductor.org/help/workflows/RNAseq123/RNAseq123_1.0.0.tar.gz

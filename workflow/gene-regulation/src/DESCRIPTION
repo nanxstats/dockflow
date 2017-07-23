@@ -1,0 +1,21 @@
+Package: generegulation
+Title: Dummy Package
+Version: 0.99.120866
+Authors@R: person(role=c("aut", "cre"), "Bioconductor Package",
+        "Maintainer", email = "maintainer@bioconductor.org")
+Description: dummy package
+Depends: R (>= 3.4.0)
+License: Artistic-2.0
+Encoding: UTF-8
+LazyData: true
+VignetteBuilder: knitr
+biocViews: Workflows
+Imports: BiocInstaller, MotifDb, S4Vectors, seqLogo, motifStack,
+        Biostrings, GenomicFeatures, org.Sc.sgd.db,
+        BSgenome.Scerevisiae.UCSC.sacCer3,
+        TxDb.Scerevisiae.UCSC.sacCer3.sgdGene
+Suggests: knitr, knitcitations
+NeedsCompilation: no
+Packaged: 2017-04-27 10:52:16 UTC; jenkins
+Author: Bioconductor Package Maintainer [aut, cre]
+Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>

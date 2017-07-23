@@ -1,0 +1,87 @@
+---
+title: Changing genomic coordinate systems with rtracklayer::liftOver
+output:
+  rmdformats::readthedown:
+    toc_depth: 3
+    number_sections: true
+---
+
+The liftOver facilities developed in conjunction with the UCSC
+browser track infrastructure are available for transforming
+data in GRanges formats.  This is illustrated here with
+an image of the EBI/NHGRI GWAS catalog that is, as of May 10 2017,
+distributed with coordinates defined by NCBI build hg38.
+
+# Setup: The NHGRI GWAS catalog as an hg38-based GRanges
+
+```{r doit,echo=TRUE,results="hide",message=FALSE}
+library(gwascat)
+library(GenomicRanges)
+library(rtracklayer)
+library(Homo.sapiens)
+library(BiocGenerics)
+if (!exists("cur")) load("cur.rda")
+```
+
+```{r lkOne,eval=FALSE}
+library(gwascat)
+cur = makeCurrentGwascat()  # result varies by day
+```
+
+```{r lkcur}
+cur
+```
+
+# Resource: The chain file for hg38 to hg19 transformation
+
+The transformation to hg19 coordinates is defined by a chain
+file provided by UCSC.  rtracklayer::import.chain will
+bring the data into R.
+
+```{r getch}
+library(rtracklayer)
+ch = import.chain("hg38ToHg19.over.chain")
+ch
+str(ch[[1]])
+```
+
+Some more details about the chain data structure are available
+in the import.chain man page
+
+<pre>
+   A chain file essentially details many local alignments, so it is
+   possible for the "from" ranges to map to overlapping regions in
+   the other sequence. The "from" ranges are guaranteed to be
+   disjoint (but do not necessarily cover the entire "from"
+   sequence).
+</pre>
+
+# Action: liftOver
+
+The liftOver function will create a GRangesList.
+
+```{r dolift}
+seqlevelsStyle(cur) = "UCSC"  # necessary
+cur19 = liftOver(cur, ch)
+class(cur19)
+```
+
+We unlist and coerce to the gwaswloc class, a convenient form for
+the GWAS catalog with its many mcols fields.
+
+```{r ul}
+cur19 = unlist(cur19)
+genome(cur19) = "hg19"
+cur19 = new("gwaswloc", cur19)
+cur19
+```
+
+We see that the translation leads to a loss of some loci.
+
+```{r lkloss}
+length(cur)-length(cur19)
+setdiff(cur$SNPs, cur19$SNPs)
+```
+
+It may be interesting to [follow up](http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=687289)
+some of the losses.
