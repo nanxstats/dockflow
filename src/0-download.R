@@ -21,22 +21,10 @@ workflow_urls = c (
 
 workflow_name = names(workflow_urls)
 
+# download tarballs
+
 for (i in workflow_name) dir.create(paste0('workflow/', i))
 for (i in 1L:length(workflow_urls))
   download.file(
     workflow_urls[i],
     destfile = paste0('workflow/', workflow_name[i], '/src.tar.gz'))
-
-for (i in workflow_name)
-  untar(tarfile = paste0('workflow/', i, '/src.tar.gz'),
-        exdir = paste0('workflow/', i, '/src'),
-        extras = '--strip 1')  # without top directory
-
-# unlink(paste0('workflow/', workflow_name, '/src'), recursive = TRUE)
-
-# outliers
-unlink('workflow/annotation-genomic-ranges/src/vignettes/Annotation_Resources.Rmd')
-unlink('workflow/annotation-resources/src/vignettes/Annotating_Genomic_Ranges.Rmd')
-unlink(paste0('workflow/', workflow_name, '/src/inst'), recursive = TRUE)
-
-list.files(path = 'workflow/', pattern = '.Rmd', recursive = TRUE, include.dirs = FALSE)
