@@ -23,27 +23,27 @@ library('liftr')
 #   change # of CPUs (default is 2) Memory (default is 2.0 GB)
 
 dockflow = function (workflow) {
-  
+
   # copy liftr configuration file to workflow directory
   file.copy(
     from = paste0('config/', workflow, '.yml'),
     to = paste0('workflow/', workflow, '/src/vignettes/_liftr.yml'))
-  
+
   # generate Dockerfile with lift()
   lift(
     paste0('workflow/', workflow, '/src/vignettes/index.Rmd'),
     use_config = TRUE)
-  
+
   # build Docker image and render workflow Rmd
   render_docker(
     paste0('workflow/', workflow, '/src/vignettes/index.Rmd'),
     tag = workflow, container_name = workflow, purge_info = FALSE)
-  
+
   # copy rendered HTML to website
   file.copy(
     from = paste0('workflow/', workflow, '/src/vignettes/index.html'),
     to = paste0('../dockflow-website/workflow/', workflow, '/index.html'))
-  
+
 }
 
 # 01 - sequencing
