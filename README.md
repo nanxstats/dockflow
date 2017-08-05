@@ -1,4 +1,4 @@
-# DockFlow
+# DockFlow <img src="logo.png" align="right" alt="logo" height="180" width="180" />
 
 [https://dockflow.org](https://dockflow.org)
 
