@@ -42,7 +42,7 @@ dockflow = function (workflow) {
   # copy rendered HTML to website
   file.copy(
     from = paste0('workflow/', workflow, '/src/vignettes/index.html'),
-    to = paste0('../dockflow-website/workflow/', workflow, '/index.html'))
+    to = paste0('docs/workflow/', workflow, '/index.html'))
 
 }
 

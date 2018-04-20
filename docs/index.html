@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="DockFlow explores bioinformatics workflow containerization and orchestration using Docker and liftr.">
+  <meta name="author" content="Nan Xiao">
+  <meta name="google-site-verification" content="k9xwMnRKduYeW8OXspGx6Lpxleg9uYa67Y0QSx3Vpag" />
+  <link rel="icon" href="favicon.ico">
+
+  <title>DockFlow - Containerize Bioinformatics Workflows</title>
+
+  <link href="//cdnjs.cloudflare.com/ajax/libs/bootswatch/4.0.0-alpha.6/litera/bootstrap.min.css" rel="stylesheet">
+  <link href="dockflow.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header clearfix">
+    <nav>
+      <ul class="nav nav-pills float-right">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="about/">About</a>
+        </li>
+      </ul>
+    </nav>
+    <h3 class="text-muted">DockFlow</h3>
+  </div>
+
+  <div class="row workflow">
+
+    <div class="col-lg-12">
+      <h3>Basic Workflows</h3>
+      <hr>
+    </div>
+
+    <div class="col-lg-6">
+      <h4>
+        <a href="workflow/sequencing/">
+          Sequence Analysis
+        </a>
+      </h4>
+      <p>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/workflow/sequencing/src/vignettes/index.Rmd" target="_blank">R Markdown</a>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/config/sequencing.yml" target="_blank">liftr config</a>
+      </p>
+      <p>
+        Import fasta, fastq, BAM, gff, bed, wig, and other sequence formats.
+        Trim, transform, align, and manipulate sequences. Perform quality assessment,
+        ChIP-seq, differential expression, RNA-seq, and other workflows.
+        Access the Sequence Read Archive.
+      </p>
+    </div>
+
+    <div class="col-lg-6">
+      <h4>
+        <a href="workflow/arrays/">
+          Oligonucleotide Arrays
+        </a>
+      </h4>
+      <p>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/workflow/arrays/src/vignettes/index.Rmd" target="_blank">R Markdown</a>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/config/arrays.yml" target="_blank">liftr config</a>
+      </p>
+      <p>
+        Import Affymetrix, Illumina, Nimblegen, Agilent, and other platforms.
+        Perform quality assessment, normalization, differential expression, clustering,
+        classification, gene set enrichment, genetical genomics and other workflows for
+        expression, exon, copy number, SNP, methylation and other assays. Access GEO,
+        ArrayExpress, Biomart, UCSC, and other community resources.
+      </p>
+    </div>
+
+    <div class="col-lg-6">
+      <h4>
+        <a href="workflow/annotation-resources/">
+          Annotation Resources
+        </a>
+      </h4>
+      <p>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/workflow/annotation-resources/src/vignettes/index.Rmd" target="_blank">R Markdown</a>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/config/annotation-resources.yml" target="_blank">liftr config</a>
+      </p>
+      <p>
+        Introduction to using gene, pathway, gene ontology, homology annotations and
+        the AnnotationHub. Access GO, KEGG, NCBI, Biomart, UCSC, vendor, and other sources.
+      </p>
+    </div>
+
+    <div class="col-lg-6">
+      <h4>
+        <a href="workflow/annotation-genomic-ranges/">
+          Annotating Genomic Ranges
+        </a>
+      </h4>
+      <p>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/workflow/annotation-genomic-ranges/src/vignettes/index.Rmd" target="_blank">R Markdown</a>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/config/annotation-genomic-ranges.yml" target="_blank">liftr config</a>
+      </p>
+      <p>
+        Represent common sequence data types (e.g., from BAM, gff, bed, and wig files)
+        as genomic ranges for simple and advanced range-based queries.
+      </p>
+    </div>
+
+    <div class="col-lg-6">
+      <h4>
+        <a href="workflow/annotation-genomic-variants/">
+          Annotating Genomic Variants
+        </a>
+      </h4>
+      <p>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/workflow/annotation-genomic-variants/src/vignettes/index.Rmd" target="_blank">R Markdown</a>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/config/annotation-genomic-variants.yml" target="_blank">liftr config</a>
+      </p>
+      <p>
+        Read and write VCF files. Identify structural location of variants and compute
+        amino acid coding changes for non-synonymous variants. Use SIFT and PolyPhen
+        database packages to predict consequence of amino acid coding changes.
+      </p>
+    </div>
+
+    <div class="col-lg-6">
+      <h4>
+        <a href="workflow/liftover/">
+          Changing Genomic Coordinate Systems with rtracklayer::liftOver
+        </a>
+      </h4>
+      <p>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/workflow/liftover/src/vignettes/index.Rmd" target="_blank">R Markdown</a>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/config/liftover.yml" target="_blank">liftr config</a>
+      </p>
+      <p>
+        The liftOver facilities developed in conjunction with the UCSC browser track
+        infrastructure are available for transforming data in GRanges formats.
+        This is illustrated here with an image of the NHGRI GWAS catalog that is,
+        as of Oct. 31 2014, distributed with coordinates defined by NCBI build hg38.
+      </p>
+    </div>
+
+    <div class="col-lg-12">
+      <h3>Advanced Workflows</h3>
+      <hr>
+    </div>
+
+    <div class="col-lg-12">
+      <h4>
+        <a href="workflow/high-throughput-assays/">
+          High-Throughput Assays
+        </a>
+      </h4>
+      <p>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/workflow/high-throughput-assays/src/vignettes/index.Rmd" target="_blank">R Markdown</a>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/config/high-throughput-assays.yml" target="_blank">liftr config</a>
+      </p>
+      <p>
+        Import, transform, edit, analyze and visualize flow cytometric, mass spec,
+        HTqPCR, cell-based, and other assays.
+      </p>
+    </div>
+
+    <div class="col-lg-12">
+      <h4>
+        <a href="workflow/rnaseq-gene/">
+          RNA-Seq Workflow: Gene-Level Exploratory Analysis and Differential Expression
+        </a>
+      </h4>
+      <p>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/workflow/rnaseq-gene/src/vignettes/index.Rmd" target="_blank">R Markdown</a>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/config/rnaseq-gene.yml" target="_blank">liftr config</a>
+      </p>
+      <p>
+        This lab will walk you through an end-to-end RNA-Seq differential expression workflow,
+        using DESeq2 along with other Bioconductor packages. We will start from the FASTQ files,
+        show how these were aligned to the reference genome, prepare gene expression values as
+        a count matrix by counting the sequenced fragments, perform exploratory data analysis (EDA),
+        perform differential gene expression analysis with DESeq2, and visually explore the results.
+      </p>
+    </div>
+
+    <div class="col-lg-12">
+      <h4>
+        <a href="workflow/proteomics/">
+          Mass Spectrometry and Proteomics
+        </a>
+      </h4>
+      <p>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/workflow/proteomics/src/vignettes/index.Rmd" target="_blank">R Markdown</a>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/config/proteomics.yml" target="_blank">liftr config</a>
+      </p>
+      <p>
+        This lab demonstrates how to access data from proteomics data repositories, how to parse
+        various mass spectrometry data formats, how to identify MS2 spectra and analyse the
+        search results, how to use the high-level infrastructure for raw mass spectrometry
+        and quantitative proteomics experiments and quantitative data processing and analysis.
+      </p>
+    </div>
+
+    <div class="col-lg-12">
+      <h4>
+        <a href="workflow/gene-regulation/">
+          Transcription Factor Binding
+        </a>
+      </h4>
+      <p>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/workflow/gene-regulation/src/vignettes/index.Rmd" target="_blank">R Markdown</a>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/config/gene-regulation.yml" target="_blank">liftr config</a>
+      </p>
+      <p>
+        Finding Candidate Binding Sites for Known Transcription Factors via Sequence Matching.
+      </p>
+    </div>
+
+    <div class="col-lg-12">
+      <h4>
+        <a href="workflow/eqtl/">
+          Cloud-Enabled cis-eQTL Search and Annotation
+        </a>
+      </h4>
+      <p>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/workflow/eqtl/src/vignettes/index.Rmd" target="_blank">R Markdown</a>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/config/eqtl.yml" target="_blank">liftr config</a>
+      </p>
+      <p>
+        Bioconductor can be used to perform detailed analyses of relationships between
+        DNA variants and mRNA abundance. Genotype (potentially imputed) and expression
+        data are organized in packages prior to analysis, using very concise representations.
+        SNP and probe filters can be specified at run time. Transcriptome-wide testing can be
+        carried out using multiple levels of concurrency (chromosomes to nodes, genes to
+        cores is a common approach). Default outputs of the cloud-oriented interface
+        ciseqByCluster include FDR for all SNP-gene pairs in cis, along with locus-specific
+        annotations of genetic and genomic contexts.
+      </p>
+    </div>
+
+    <div class="col-lg-12">
+      <h4>
+        <a href="workflow/chipseqdb/">
+          Differential Binding from ChIP-seq Data
+        </a>
+        <p>
+          <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/workflow/chipseqdb/src/vignettes/index.Rmd" target="_blank">R Markdown</a>
+          <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/config/chipseqdb.yml" target="_blank">liftr config</a>
+        </p>
+      </h4>
+      <p>
+        This workflow describes an analysis pipeline for de novo detection of differential
+        binding (DB) from ChIP-seq data, from read alignment to interpretation of putative DB regions.
+        It will be based on the use of sliding windows in the csaw package, with statistical modelling
+        performed using methods in the edgeR package. Analyses will be demonstrated on real histone
+        mark and transcription factor ChIP-seq data.
+      </p>
+    </div>
+
+    <div class="col-lg-12">
+      <h4>
+        <a href="workflow/simple-single-cell/">
+          Low-Level Analyses of Single-Cell RNA-Sequencing Data
+        </a>
+      </h4>
+      <p>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/workflow/simple-single-cell/src/vignettes/index.Rmd" target="_blank">R Markdown</a>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/config/simple-single-cell.yml" target="_blank">liftr config</a>
+      </p>
+      <p>
+        This workflow implements a low-level analysis pipeline for scRNA-seq data using scran,
+        scater and other Bioconductor packages. It describes how to perform quality control
+        on the libraries, normalization of cell-specific biases, basic data exploration and
+        cell cycle phase identification. Procedures to detect highly variable genes,
+        significantly correlated genes and subpopulation-specific marker genes are also shown.
+        These analyses are demonstrated on a range of publicly available scRNA-seq data sets.
+      </p>
+    </div>
+
+    <div class="col-lg-12">
+      <h4>
+        <a href="workflow/rnaseq-123/">
+          RNA-Seq Analysis is Easy as 1-2-3
+        </a>
+      </h4>
+      <p>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/workflow/rnaseq-123/src/vignettes/index.Rmd" target="_blank">R Markdown</a>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/config/rnaseq-123.yml" target="_blank">liftr config</a>
+      </p>
+      <p>
+        This workflow demonstrates how to analyse RNA-sequencing data using the edgeR, limma and Glimma packages.
+        The edgeR package is first used to import, organise, filter and normalise the data,
+        followed by the limma package with its voom method, linear modelling and empirical
+        Bayes moderation to assess differential expression and perform gene set testing.
+        This pipeline is further enhanced by the Glimma package which enables interactive
+        exploration of the results so that individual samples and genes can be examined by the user.
+      </p>
+    </div>
+
+    <div class="col-lg-12">
+      <h4>
+        <a href="workflow/expression-normalization/">
+          Gene Expression Normalization Workflow
+        </a>
+      </h4>
+      <p>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/workflow/expression-normalization/src/vignettes/index.Rmd" target="_blank">R Markdown</a>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/config/expression-normalization.yml" target="_blank">liftr config</a>
+      </p>
+      <p>
+        This workflow elucidates a customizable strategy to identify the effects of technical and
+        confounding factors on gene expression data and normalize it while preserving the underlying
+        biological features of interest. The example analysis demonstrated here explores
+        how certain technical covariates influence the interpretation of the impact of
+        Coronary Artery Disease on peripheral blood gene expression.
+      </p>
+    </div>
+
+    <div class="col-lg-12">
+      <h4>
+        <a href="workflow/methylation-array-analysis/">
+          Methylation Array Analysis
+        </a>
+      </h4>
+      <p>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/workflow/methylation-array-analysis/src/vignettes/index.Rmd" target="_blank">R Markdown</a>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/config/methylation-array-analysis.yml" target="_blank">liftr config</a>
+      </p>
+      <p>
+        Methylation in the human genome is known to be associated with development and disease.
+        The Illumina Infinium methylation arrays are by far the most common way to interrogate
+        methylation across the human genome. This Bioconductor workflow uses multiple packages
+        for the analysis of methylation array data. Specifically, we demonstrate the steps
+        involved in a typical differential methylation analysis pipeline including:
+        quality control, filtering, normalization, data exploration and statistical testing
+        for probe-wise differential methylation. We further outline other analyses such as
+        differential methylation of regions, differential variability analysis, estimating
+        cell type composition and gene ontology testing. Finally, we provide some examples
+        of how to visualise methylation array data.
+      </p>
+    </div>
+
+    <div class="col-lg-12">
+      <h4>
+        <a href="workflow/rnaseq-gene-edgerql/">
+          Gene-Level RNA-Seq Differential Expression and Pathway Analysis
+        </a>
+      </h4>
+      <p>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/workflow/rnaseq-gene-edgerql/src/vignettes/index.Rmd" target="_blank">R Markdown</a>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/config/rnaseq-gene-edgerql.yml" target="_blank">liftr config</a>
+      </p>
+      <p>
+        Gene-level RNA-seq differential expression and pathway analysis using Rsubread
+        and the edgeR quasi-likelihood pipeline.
+      </p>
+    </div>
+
+    <div class="col-lg-12">
+      <h4>
+        <a href="workflow/tcga/">
+          TCGA Workflow: Analyze Cancer Genomics and Epigenomics Data
+        </a>
+      </h4>
+      <p>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/workflow/tcga/src/vignettes/index.Rmd" target="_blank">R Markdown</a>
+        <a class="btn btn-outline-success btn-sm" role="button" href="https://github.com/road2stat/dockflow/blob/master/config/tcga.yml" target="_blank">liftr config</a>
+      </p>
+      <p>
+        Biotechnological advances in sequencing have led to an explosion of publicly
+        available data via large international consortia such as The Cancer Genome Atlas (TCGA),
+        The Encyclopedia of DNA Elements (ENCODE), and The NIH Roadmap Epigenomics Mapping
+        Consortium (Roadmap). These projects have provided unprecedented opportunities to
+        interrogate the epigenome of cultured cancer cell lines as well as normal and tumor
+        tissues with high genomic resolution. The Bioconductor project offers more than
+        1,000 open-source software and statistical packages to analyze high-throughput genomic data.
+        However, most packages are designed for specific data types (e.g. expression,
+        epigenetics, genomics) and there is no one comprehensive tool that provides a complete
+        integrative analysis of the resources and data provided by all three public projects.
+        A need to create an integration of these different analyses was recently proposed.
+        In this workflow, we provide a series of biologically focused integrative analyses of
+        different molecular data. We describe how to download, process and prepare TCGA data
+        and by harnessing several key Bioconductor packages, we describe how to extract
+        biologically meaningful genomic and epigenomic data. Using Roadmap and ENCODE data,
+        we provide a work plan to identify biologically relevant functional epigenomic elements
+        associated with cancer. To illustrate our workflow, we analyzed two types of brain tumors:
+        low-grade glioma (LGG) versus high-grade glioma (glioblastoma multiform or GBM).
+      </p>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <p align="center">All workflows and descriptions are from <a href="https://bioconductor.org" target="_blank">Bioconductor</a>.
+      Containerized with <a href="https://liftr.me" target="_blank">liftr</a>.</p>
+    <p align="center">&copy; 2017 DockFlow is an open source project of <a href="https://nanx.me" target="_blank">Nan Xiao</a>.</p>
+    <p align="center">Licensed under the Apache License 2.0.</p>
+  </footer>
+
+</div>
+
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-102527116-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>
