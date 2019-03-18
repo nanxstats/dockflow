@@ -17,7 +17,7 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends libnetcdf-d
 
 RUN Rscript -e "install.packages(c('devtools','knitr','rmarkdown','shiny','RCurl'), repos = 'https://cran.rstudio.com')"
 
-RUN Rscript -e "source('https://cdn.rawgit.com/road2stat/liftrlib/aa132a2d/install_cran.R');install_cran(c('rmdformats','nloptr'))"
+RUN Rscript -e "source('https://cdn.rawgit.com/nanxstats/liftrlib/aa132a2d/install_cran.R');install_cran(c('rmdformats','nloptr'))"
 
 RUN Rscript -e "source('http://bioconductor.org/biocLite.R');biocLite(c('BiocStyle','RforProteomics','mzR','mzID','MSnID','MSnbase','rpx','MLInterfaces','pRoloc','pRolocdata','MSGFplus','rols','hpar'))"
 

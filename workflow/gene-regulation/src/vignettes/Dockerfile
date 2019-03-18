@@ -17,7 +17,7 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends libgsl-dev 
 
 RUN Rscript -e "install.packages(c('devtools','knitr','rmarkdown','shiny','RCurl'), repos = 'https://cran.rstudio.com')"
 
-RUN Rscript -e "source('https://cdn.rawgit.com/road2stat/liftrlib/aa132a2d/install_cran.R');install_cran(c('rmdformats','grImport'))"
+RUN Rscript -e "source('https://cdn.rawgit.com/nanxstats/liftrlib/aa132a2d/install_cran.R');install_cran(c('rmdformats','grImport'))"
 
 RUN Rscript -e "source('http://bioconductor.org/biocLite.R');biocLite(c('MotifDb','S4Vectors','seqLogo','motifStack','Biostrings','GenomicFeatures','org.Sc.sgd.db','BSgenome.Scerevisiae.UCSC.sacCer3','TxDb.Scerevisiae.UCSC.sacCer3.sgdGene'))"
 

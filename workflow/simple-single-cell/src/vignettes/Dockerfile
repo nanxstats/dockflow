@@ -15,7 +15,7 @@ RUN  rm -f /var/lib/dpkg/available \
 
 RUN Rscript -e "install.packages(c('devtools','knitr','rmarkdown','shiny','RCurl'), repos = 'https://cran.rstudio.com')"
 
-RUN Rscript -e "source('https://cdn.rawgit.com/road2stat/liftrlib/aa132a2d/install_cran.R');install_cran(c('rmdformats','Rtsne','mvoutlier','R.utils','readxl','gplots'))"
+RUN Rscript -e "source('https://cdn.rawgit.com/nanxstats/liftrlib/aa132a2d/install_cran.R');install_cran(c('rmdformats','Rtsne','mvoutlier','R.utils','readxl','gplots'))"
 
 RUN Rscript -e "source('http://bioconductor.org/biocLite.R');biocLite(c('BiocParallel','scater','scran','org.Mm.eg.db','RBGL','limma','dynamicTreeCut','edgeR','TxDb.Mmusculus.UCSC.mm10.ensGene','BiocStyle'))"
 
