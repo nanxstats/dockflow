@@ -1,115 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="DockFlow explores bioinformatics workflow containerization and orchestration using Docker and liftr.">
+  <meta name="description" content="Bioinformatics workflow containerization and orchestration using Docker and liftr.">
   <meta name="author" content="Nan Xiao">
-  <link rel="icon" href="favicon.ico">
 
   <title>DockFlow - About</title>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.2/litera/bootstrap.min.css">
-  <link href="../dockflow.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha256-YLGeXaapI0/5IgZopewRJcFXomhRMlYYjugPLSyNjTY=" crossorigin="anonymous" />
+  <link href="../custom.css" rel="stylesheet">
 
 </head>
 
 <body>
 
-<div class="container">
+  <div class="container">
 
-  <div class="header clearfix">
-    <nav>
-      <ul class="nav nav-pills float-right">
-        <li class="nav-item">
-          <a class="nav-link" href="../">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="#">About <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="https://github.com/nanxstats/dockflow" target="_blank">GitHub</a>
-        </li>
-      </ul>
-    </nav>
-    <h3 class="text-muted">DockFlow</h3>
+    <div class="header clearfix">
+      <nav>
+        <ul class="nav nav-pills float-right">
+          <li class="nav-item">
+            <a class="nav-link" href="../">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="#">About <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/nanxstats/dockflow" target="_blank">GitHub</a>
+          </li>
+        </ul>
+      </nav>
+      <h1 class="h3"><a href="https://dockflow.org/">DockFlow</a></h1>
+    </div>
+
+    <div class="row workflow">
+
+      <div class="col-lg-12">
+        <h2 class="h3">About DockFlow</h3>
+          <hr>
+      </div>
+
+      <div class="col-lg-12">
+
+        <p>
+          We have accumulated numerous excellent software packages for analyzing large-scale biomedical data
+          on the way to delivering on the promise of human genomics.
+          Written as R Markdown documents,
+          <a href="https://bioconductor.org/help/workflows/" target="_blank">Bioconductor workflows</a>
+          illustrated the feasibility of organizing and demonstrating such software collections in a
+          reproducible and human-readable way.
+        </p>
+
+        <p>
+          Moving forward, how to implement fully automatic workflow execution and persistently reproducible
+          report compilation on an industrial-scale becomes challenging from the engineering perspective.
+          For example, the software tools across workflows usually require drastically different system
+          dependencies and execution environments and thus need to be isolated completely.
+        </p>
+
+        <p>
+          <a href="../">DockFlow</a> is a proof-of-concept project exploring the
+          technical possibility and complexity for bioinformatics workflow containerization
+          and orchestration using Docker. As our first experiment, all 18 available Bioconductor workflows
+          were selected to be containerized. With the help of our R package
+          <a href="https://nanx.me/liftr/" target="_blank">liftr</a>,
+          we show it is possible to achieve the goal of persistent reproducible workflow containerization by
+          simply creating and managing a YAML configuration file for each workflow.
+        </p>
+
+      </div>
+
+      <div class="col-lg-12">
+        <h2 class="h3">Poster</h2>
+        <hr>
+      </div>
+
+      <div class="col-lg-12">
+        <p>
+          The DockFlow project was first presented at the
+          <a href="https://bioconductor.org/help/course-materials/2017/BioC2017/">BioC 2017</a> conference
+          on July 27, 2017.</p>
+        <p>
+          <a href="https://nanx.me/posters/dockflow-poster-bioc2017.pdf">Download our poster here</a>.
+        </p>
+      </div>
+
+      <div class="col-lg-12">
+        <h2 class="h3">Interested in contributing?</h2>
+        <hr>
+      </div>
+
+      <div class="col-lg-12">
+        <p>
+          Please send your pull requests or issues to the <a href="https://github.com/nanxstats/dockflow"
+            target="_blank">DockFlow project on GitHub</a>.
+        </p>
+        <p>
+          To contact the author, please send an email to <a href="mailto:me@nanx.me">me@nanx.me</a>.
+        </p>
+      </div>
+
+    </div>
+
+    <footer class="footer">
+      <p align="center">All workflows and descriptions are from <a href="https://bioconductor.org"
+          target="_blank">Bioconductor</a>.
+        Containerized with <a href="https://nanx.me/liftr/" target="_blank">liftr</a>.</p>
+      <p align="center">&copy; 2017 DockFlow is an open source project of <a href="https://nanx.me" target="_blank">Nan
+          Xiao</a>.</p>
+      <p align="center">Licensed under the Apache License 2.0.</p>
+    </footer>
+
   </div>
-
-  <div class="row workflow">
-
-    <div class="col-lg-12">
-      <h3>About DockFlow</h3>
-      <hr>
-    </div>
-
-    <div class="col-lg-12">
-
-      <p>
-        We have accumulated numerous excellent software packages for analyzing large-scale biomedical data
-        on the way to delivering on the promise of human genomics.
-        Written as R Markdown documents,
-        <a href="https://bioconductor.org/help/workflows/" target="_blank">Bioconductor workflows</a>
-        illustrated the feasibility of organizing and demonstrating such software collections in a
-        reproducible and human-readable way.
-      </p>
-
-      <p>
-        Moving forward, how to implement fully automatic workflow execution and persistently reproducible
-        report compilation on an industrial-scale becomes challenging from the engineering perspective.
-        For example, the software tools across workflows usually require drastically different system
-        dependencies and execution environments and thus need to be isolated completely.
-      </p>
-
-      <p>
-        <a href="../">DockFlow</a> is a proof-of-concept project exploring the
-        technical possibility and complexity for bioinformatics workflow containerization
-        and orchestration using Docker. As our first experiment, all 18 available Bioconductor workflows
-        were selected to be containerized. With the help of our R package
-        <a href="https://nanx.me/liftr/" target="_blank">liftr</a>,
-        we show it is possible to achieve the goal of persistent reproducible workflow containerization by
-        simply creating and managing a YAML configuration file for each workflow.
-      </p>
-
-    </div>
-
-    <div class="col-lg-12">
-      <h3>Poster</h3>
-      <hr>
-    </div>
-
-    <div class="col-lg-12">
-      <p>
-        The DockFlow project was first presented at the
-        <a href="https://bioconductor.org/help/course-materials/2017/BioC2017/">BioC 2017</a> conference
-        at July 27, 2017.</p>
-      <p>
-        Please <a href="https://nanx.me/posters/dockflow-poster-bioc2017.pdf">download our poster here</a>.
-      </p>
-    </div>
-
-    <div class="col-lg-12">
-      <h3>Interested in contributing?</h3>
-      <hr>
-    </div>
-
-    <div class="col-lg-12">
-      <p>
-        Please send your pull requests or issues to the <a href="https://github.com/nanxstats/dockflow" target="_blank">DockFlow project on GitHub</a>.
-      </p>
-      <p>
-        To contact the author, please send an email to <a href="mailto:me@nanx.me">me@nanx.me</a>.
-      </p>
-    </div>
-
-  </div>
-
-  <footer class="footer">
-    <p align="center">All workflows and descriptions are from <a href="https://bioconductor.org" target="_blank">Bioconductor</a>.
-      Containerized with <a href="https://nanx.me/liftr/" target="_blank">liftr</a>.</p>
-    <p align="center">&copy; 2017 DockFlow is an open source project of <a href="https://nanx.me" target="_blank">Nan Xiao</a>.</p>
-    <p align="center">Licensed under the Apache License 2.0.</p>
-  </footer>
-
-</div>
 
 </body>
+
 </html>
